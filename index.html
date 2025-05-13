@@ -14,34 +14,24 @@
             color: white;
             padding: 10px;
             cursor: pointer;
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Adjusted for spacing */
             font-weight: bold;
-            /* Added Flexbox for side-by-side layout */
-            display: flex;
+            list-style: none;
+            display: flex; /* For side-by-side title and time */
             justify-content: space-between;
             align-items: center;
+            border-radius: 5px; /* Rounded corners for banner */
         }
-        /* Use details/summary for accordions */
-        details > summary {
-            list-style: none; /* Remove default triangle */
+        .content { 
+            display: none; 
+            padding: 15px; 
+            border: 1px solid #ddd; 
+            margin-bottom: 10px; 
+            border-radius: 5px; /* Rounded corners for content */
+            margin-top: -10px; /* Visual connection with banner */
+            padding-top: 20px; /* Avoid text clash */
+            background-color: #fff; /* Ensure content background is white or default */
         }
-        details > summary::-webkit-details-marker {
-            display: none; /* Remove default triangle for Chrome/Safari */
-        }
-        details > summary::marker {
-             display: none; /* Remove default triangle for Firefox */
-        }
-        /* Custom marker logic (optional) */
-        /*
-         details > summary:before {
-            content: '▶ ';
-            margin-right: 5px;
-         }
-         details[open] > summary:before {
-            content: '▼ ';
-         }
-        */
-        .content { display: block; padding: 10px; border: 1px solid #ddd; margin-top: -10px; margin-bottom: 10px; border-top: none;} /* Ensure content is visible by default */
         table {
             width: 100%;
             border-collapse: collapse;
@@ -52,7 +42,7 @@
             text-align: left;
             vertical-align: top;
         }
-        span[style*="color: red;"] { /* Keep red span for emphasis */
+        span[style*="color: red;"] { 
             font-weight: bold;
         }
          ul, ol {
@@ -71,15 +61,49 @@
         .kanban-test { color: #d9534f; } /* Red for Test */
         .kanban-done { color: #5cb85c; } /* Green for Done */
 
-        /* Span styles for title and time in banner */
+        /* Making facilitator instructions clearer */
+        td em, td i { /* Style for italicized facilitator notes */
+            color: #555;
+            font-style: italic;
+            display: block; /* Put notes on new lines */
+            margin-top: 5px;
+        }
+        /* Ensure step <strong> tags render bold */
+        td strong { font-weight: bold; } /* General strong for keywords */
+        td > strong { display: block; margin-bottom: 5px; } /* For step headers */
+
         .activity-title {
-            flex-grow: 1; /* Allows title to take available space */
-            padding-right: 10px; /* Add some space between title and time */
+            flex-grow: 1; 
+            padding-right: 10px; 
         }
         .activity-time {
-            white-space: nowrap; /* Prevents time from wrapping */
+            white-space: nowrap; 
         }
     </style>
+    <script>
+        function toggleContent(id) {
+            const content = document.getElementById(id);
+            if (content) {
+                if (content.style.display === "none" || content.style.display === "") {
+                    content.style.display = "block";
+                } else {
+                    content.style.display = "none";
+                }
+            }
+        }
+
+        window.onload = () => {
+            const contents = document.querySelectorAll('.content');
+            contents.forEach(content => {
+                content.style.display = 'none';
+            });
+            // Open "Resumen de Sesión" by default
+            const resumenContent = document.getElementById('activity_0_content');
+            if (resumenContent) {
+                resumenContent.style.display = 'block';
+            }
+        };
+    </script>
 </head>
 <body>
     <div class="header">
@@ -89,12 +113,12 @@
         <h2 class="time-title">Tiempo efectivo de clase: 40 minutos</h2>
 
         <!-- Resumen de Sesión -->
-        <details id="activity-0" class="activity">
-            <summary class="banner">
+        <div id="activity-0" class="activity">
+            <div class="banner" onclick="toggleContent('activity_0_content')">
                 <span class="activity-title">📝 Resumen de Sesión</span>
                 <span class="activity-time"></span>
-            </summary>
-            <div class="content">
+            </div>
+            <div id="activity_0_content" class="content" style="display: block;">
                 <table>
                     <tr>
                         <td style="width: 50%; padding: 10px; border-right: 1px solid #ddd;">
@@ -128,17 +152,17 @@
                     </tr>
                 </table>
             </div>
-        </details>
+        </div>
 
         <!-- Desarrollo de la Sesión -->
 
         <!-- Actividad 1: ¡Stand-up de Nuevas Funciones! -->
-        <details id="activity-1" class="activity">
-            <summary class="banner">
+        <div id="activity-1" class="activity">
+            <div class="banner" onclick="toggleContent('activity_1_content')">
                  <span class="activity-title">🌟 Actividad 1: ¡Stand-up de Nuevas Funciones!</span>
                  <span class="activity-time">⏰ Tiempo: 5 minutos</span>
-            </summary>
-            <div class="content">
+            </div>
+            <div id="activity_1_content" class="content">
                 <table>
                     <tr>
                         <th style="width: 50%;">Acción</th>
@@ -146,17 +170,24 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 1 (1 min):</strong> Iniciar la sesión presentando la fase de expansión de funcionalidades.
-                            <br><em>(<strong>Proyectar Diapositiva 1:</strong> Título Sesión 7 (Avanzado) + Objetivo: "¡Expandiendo Poderes! Objetivo: Diseñar técnicamente e iniciar implementación de la Feature Adicional 1").</em>
+                            <strong>Paso 1 (1 min):</strong>
+                            <ul>
+                                <li>Iniciar la sesión presentando la fase de expansión de funcionalidades.</li>
+                                <li><strong>Proyectar Diapositiva 1</strong>.</li>
+                            </ul>
                         </td>
                         <td>
-                            "¡Equipos, prepárense para 'Expandir Poderes'! Bienvenidos a la Sesión 7. Ya tenemos un núcleo funcional (o casi), ¡ahora es el momento de añadirle habilidades extra a nuestro Robot Héroe! Hoy diseñaremos y empezaremos a construir la primera Feature Adicional."
+                            "¡Equipos Pro! ¡Felicidades por tener un núcleo estable! Ahora que la base es sólida, es momento de ¡Expandir la Misión! Vamos a añadir la primera característica adicional (Feature) para hacer nuestro proyecto aún más increíble."
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 2 (3 min):</strong> Guiar la selección de la primera Feature Adicional del backlog. El Arq. T. lidera la discusión sobre la integración.
-                            <br><em>(<strong>Proyectar Diapositiva 2:</strong> Selección de Feature 1 - Kanban visual destacando columna "Por Hacer" 💡. Preguntas: ¿Qué feature del backlog añadimos primero? (Ej: LEDs indicadores). Arq. T. 📐: ¿Cómo se integrará con el núcleo existente?).</em>
+                            <strong>Paso 2 (3 min):</strong>
+                            <ul>
+                                <li>Guiar la selección de la primera Feature Adicional del backlog.</li>
+                                <li>El Arq. T. lidera la discusión sobre la integración.</li>
+                                <li><strong>Proyectar Diapositiva 2</strong>.</li>
+                            </ul>
                         </td>
                         <td>
                             "Vamos a nuestro 'Stand-up de Nuevas Funciones'. Miren su backlog en la columna <strong class='kanban-icon kanban-todo'>💡 Por Hacer</strong>. Allí tenemos varias ideas para features adicionales que surgieron en el diseño inicial."
@@ -170,7 +201,10 @@
                     </tr>
                      <tr>
                         <td>
-                            <strong>Paso 3 (1 min):</strong> Confirmar la feature seleccionada y el enfoque de diseño.
+                            <strong>Paso 3 (1 min):</strong>
+                            <ul>
+                                <li>Confirmar la feature seleccionada y el enfoque de diseño.</li>
+                            </ul>
                         </td>
                         <td>
                             "¡Feature seleccionada! Ya tenemos nuestra primera misión de expansión. Ahora, vamos a diseñarla en detalle."
@@ -178,15 +212,15 @@
                     </tr>
                 </table>
             </div>
-        </details>
+        </div>
 
         <!-- Actividad 2: ¡Diseñando la Mejora! -->
-        <details id="activity-2" class="activity">
-            <summary class="banner">
+        <div id="activity-2" class="activity">
+            <div class="banner" onclick="toggleContent('activity_2_content')">
                  <span class="activity-title">✍️ Actividad 2: ¡Diseñando la Mejora!</span>
                  <span class="activity-time">⏰ Tiempo: 15 minutos</span>
-            </summary>
-            <div class="content">
+            </div>
+            <div id="activity_2_content" class="content">
                 <table>
                     <tr>
                         <th style="width: 50%;">Acción</th>
@@ -194,8 +228,11 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 1 (3 min):</strong> Explicar la tarea de diseño técnico detallado, liderada por el Arq. T.
-                            <br><em>(<strong>Proyectar Diapositiva 3:</strong> Diseñando la Feature 1 - Rol líder: Arq. T. 📐. Foco: Detallar diseño técnico (ej: qué LED usar, cuándo/cómo encender/apagar, qué pin, qué bloque de código nuevo). Participan Ing. 💻 y Tester 🧪 para entender implementación y pruebas).</em>
+                            <strong>Paso 1 (3 min):</strong>
+                            <ul>
+                                <li>Explicar la tarea de diseño técnico detallado, liderada por el Arq. T.</li>
+                                <li><strong>Proyectar Diapositiva 3</strong>.</li>
+                            </ul>
                         </td>
                         <td>
                             "Ahora, ¡a diseñar esta mejora a fondo! <strong>Arquitecto/a T. (📐)</strong>, es tu momento de liderar el diseño técnico detallado de la feature que eligieron."
@@ -211,9 +248,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 2 (10 min):</strong> Los equipos trabajan en el diseño técnico detallado de la Feature 1.
-                            <br>El Arq. T. lidera y documenta el diseño (puede ser un esquema, pseudocódigo, notas claras).
-                            <br>Circular y apoyar, asegurando que el diseño sea claro, técnicamente viable y considere la integración con el núcleo.
+                            <strong>Paso 2 (10 min):</strong>
+                            <ul>
+                                <li>Los equipos trabajan en el diseño técnico detallado de la Feature 1.</li>
+                                <li>El Arq. T. lidera y documenta el diseño.</li>
+                                <li>Circular y apoyar, asegurando que el diseño sea claro, técnicamente viable y considere la integración con el núcleo.</li>
+                            </ul>
                         </td>
                         <td>
                             "¡A diseñar en detalle! Tienen 10 minutos para definir cómo funcionará técnicamente su Feature 1."
@@ -229,7 +269,10 @@
                     </tr>
                      <tr>
                         <td>
-                            <strong>Paso 3 (2 min):</strong> Confirmación de que el diseño técnico está listo y comprendido por el equipo.
+                            <strong>Paso 3 (2 min):</strong>
+                            <ul>
+                                <li>Confirmación de que el diseño técnico está listo y comprendido por el equipo.</li>
+                            </ul>
                         </td>
                         <td>
                             "¿Equipos, tienen un diseño técnico claro para su Feature 1? ¿Ingeniero/a y Tester entienden cómo se supone que debe funcionar?"
@@ -239,15 +282,15 @@
                     </tr>
                 </table>
             </div>
-        </details>
+        </div>
 
         <!-- Actividad 3: ¡Inicio Desarrollo Feature 1! -->
-        <details id="activity-3" class="activity">
-            <summary class="banner">
+        <div id="activity-3" class="activity">
+            <div class="banner" onclick="toggleContent('activity_3_content')">
                  <span class="activity-title">💡 Actividad 3: ¡Inicio Desarrollo Feature 1!</span>
                  <span class="activity-time">⏰ Tiempo: 15 minutos</span>
-            </summary>
-            <div class="content">
+            </div>
+            <div id="activity_3_content" class="content">
                 <table>
                     <tr>
                         <th style="width: 50%;">Acción</th>
@@ -255,9 +298,13 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 1 (2 min):</strong> Explicar las tareas paralelas de Ingeniero/a y Tester. Mover la tarea al Kanban.
-                            <br><em>(<strong>Proyectar Diapositiva 4:</strong> Inicio Desarrollo Feature 1 - Ing. 💻: Empieza a escribir código basado en diseño. Tester 🧪: Empieza a diseñar pruebas específicas para la feature. Kanban: Mover tarea de 💡 a ⚙️ Haciendo).</em>
-                            <br>Asegurarse de que la tarea correspondiente a la Feature 1 se mueva de "Por Hacer" a "Haciendo".
+                            <strong>Paso 1 (2 min):</strong>
+                            <ul>
+                                <li>Explicar las tareas paralelas de Ingeniero/a y Tester.</li>
+                                <li>Mover la tarea al Kanban.</li>
+                                <li><strong>Proyectar Diapositiva 4</strong>.</li>
+                                <li>Asegurarse de que la tarea correspondiente a la Feature 1 se mueva de "Por Hacer" a "Haciendo".</li>
+                            </ul>
                         </td>
                         <td>
                             "¡Es hora de empezar a materializar esa nueva feature! Ahora, el trabajo se divide en paralelo:"
@@ -271,9 +318,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 2 (12 min):</strong> Facilitar el inicio de la implementación y diseño de pruebas.
-                            <br>Circular y apoyar al Ingeniero/a con el código inicial y al Tester con el diseño de pruebas.
-                            <br>El Arq. T. puede supervisar ambos procesos y asegurar que se alinean con el diseño y la integración prevista.
+                            <strong>Paso 2 (12 min):</strong>
+                            <ul>
+                                <li>Facilitar el inicio de la implementación y diseño de pruebas.</li>
+                                <li>Circular y apoyar al Ingeniero/a con el código inicial y al Tester con el diseño de pruebas.</li>
+                                <li>El Arq. T. puede supervisar ambos procesos y asegurar que se alinean con el diseño y la integración prevista.</li>
+                            </ul>
                         </td>
                         <td>
                             "¡Adelante con el desarrollo inicial! Tienen 12 minutos."
@@ -287,7 +337,10 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 3 (1 min):</strong> Pausa breve para preparar el cierre.
+                            <strong>Paso 3 (1 min):</strong>
+                            <ul>
+                                <li>Pausa breve para preparar el cierre.</li>
+                            </ul>
                         </td>
                         <td>
                             "¡Ok, equipos, un minuto más para guardar lo que estén haciendo y preparamos el cierre de la sesión!"
@@ -295,15 +348,15 @@
                     </tr>
                 </table>
             </div>
-        </details>
+        </div>
 
         <!-- Actividad 4: ¡Plan para Feature 1! -->
-        <details id="activity-4" class="activity">
-            <summary class="banner">
+        <div id="activity-4" class="activity">
+            <div class="banner" onclick="toggleContent('activity_4_content')">
                  <span class="activity-title">🗓️ Actividad 4: ¡Plan para Feature 1!</span>
                  <span class="activity-time">⏰ Tiempo: 5 minutos</span>
-            </summary>
-            <div class="content">
+            </div>
+            <div id="activity_4_content" class="content">
                 <table>
                      <tr>
                         <th style="width: 50%;">Acción</th>
@@ -311,9 +364,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <strong>Paso 1 (3 min):</strong> Revisión final del Kanban y planificación para la próxima sesión.
-                            <br><em>(<strong>Proyectar Diapositiva 5:</strong> Plan Feature 1 - Kanban S7. Preguntas: ¿Claro el plan para terminar código? ¿Claro el plan para empezar pruebas en S8?).</em>
-                            <br>Cada equipo revisa su Kanban y confirma los próximos pasos para la Feature 1.
+                            <strong>Paso 1 (3 min):</strong>
+                            <ul>
+                                <li>Revisión final del Kanban y planificación para la próxima sesión.</li>
+                                <li><strong>Proyectar Diapositiva 5</strong>.</li>
+                                <li>Cada equipo revisa su Kanban y confirma los próximos pasos para la Feature 1.</li>
+                            </ul>
                         </td>
                         <td>
                             "¡Última revisión de hoy! Miren su Kanban, específicamente la tarea de la Feature 1 que está en <strong class='kanban-icon kanban-doing'>⚙️ Haciendo</strong>."
@@ -331,7 +387,10 @@
                     </tr>
                      <tr>
                         <td>
-                            <strong>Paso 2 (2 min):</strong> Cierre de la sesión y anticipación de la Sesión 8 (Desarrollo Feature 1).
+                            <strong>Paso 2 (2 min):</strong>
+                            <ul>
+                                <li>Cierre de la sesión y anticipación de la Sesión 8 (Desarrollo Feature 1).</li>
+                            </ul>
                         </td>
                         <td>
                             "¡Excelente inicio con la expansión de poderes! Hoy han diseñado en detalle su primera feature adicional y han comenzado a darle vida."
@@ -343,7 +402,7 @@
                     </tr>
                 </table>
             </div>
-        </details>
+        </div>
 
     </div> <!-- Fin del container -->
 </body>
